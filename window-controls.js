@@ -38,7 +38,7 @@
 
   let config = loadConfig();
 
-  // Crisp Fluent / Windows 11 icons
+  // Crisp Fluent / Windows 11 icons and Lucid-Lyrics Spotify Cogwheel
   const ICONS = {
     minimize: `<svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
       <path d="M14 8.5v1H2v-1h12z"/>
@@ -159,7 +159,7 @@
         Spicetify.Platform.NativeAPI.setWindowButtonsVisibility(false);
       }
     } catch (e) {
-      console.warn(`[${EXTENSION_ID}] hideNativeControls:`, e);
+      // Not fatal
     }
   }
 
@@ -206,53 +206,53 @@
       }
 
       .window-controls-container {
-        display: inline-flex;
-        align-items: center;
-        gap: 2px;
-        margin-left: 6px;
-        height: 100%;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 2px !important;
+        margin-left: 6px !important;
+        height: 100% !important;
         -webkit-app-region: no-drag !important;
-        z-index: 9999;
-        flex-shrink: 0;
+        z-index: 99999 !important;
+        flex-shrink: 0 !important;
       }
 
       .window-controls-divider {
-        width: 1px;
-        height: 14px;
-        background-color: var(--spice-highlight, rgba(255, 255, 255, 0.2));
-        margin: 0 4px;
+        width: 1px !important;
+        height: 14px !important;
+        background-color: var(--spice-highlight, rgba(255, 255, 255, 0.2)) !important;
+        margin: 0 4px !important;
         -webkit-app-region: no-drag !important;
       }
 
       .window-control-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        padding: 0;
-        margin: 0;
-        border: none;
-        outline: none;
-        background: transparent;
-        color: var(--spice-subtext, rgba(255, 255, 255, 0.7));
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.15s ease, color 0.15s ease, transform 0.08s ease;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 28px !important;
+        height: 28px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        outline: none !important;
+        background: transparent !important;
+        color: var(--spice-subtext, rgba(255, 255, 255, 0.7)) !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        transition: background-color 0.15s ease, color 0.15s ease, transform 0.08s ease !important;
         -webkit-app-region: no-drag !important;
       }
 
       .window-control-btn svg {
-        pointer-events: none;
+        pointer-events: none !important;
       }
 
       .window-control-btn:hover {
-        background-color: var(--spice-highlight, rgba(255, 255, 255, 0.15));
-        color: var(--spice-text, #ffffff);
+        background-color: var(--spice-highlight, rgba(255, 255, 255, 0.15)) !important;
+        color: var(--spice-text, #ffffff) !important;
       }
 
       .window-control-btn:active {
-        transform: scale(0.92);
+        transform: scale(0.92) !important;
       }
 
       .window-control-btn.close:hover {
@@ -300,7 +300,6 @@
         color: var(--spice-subtext, rgba(255, 255, 255, 0.6));
       }
 
-      /* Custom Spotify Toggle Switch */
       .wc-switch {
         position: relative;
         display: inline-block;
@@ -367,15 +366,21 @@
     return btn;
   }
 
+  function getTargetContainer() {
+    return (
+      document.querySelector(".main-globalNav-contentRight") ||
+      document.querySelector(".main-topBar-topbarContentRight") ||
+      document.querySelector(".main-topBar-container") ||
+      document.querySelector(".Root__globalNav")
+    );
+  }
+
   function mountControls() {
     const existing = document.querySelector(`.${EXTENSION_ID}`);
     if (existing) existing.remove();
 
-    const targetContainer =
-      document.querySelector(".main-globalNav-contentRight") ||
-      document.querySelector(".main-topBar-container");
-
-    if (!targetContainer) return;
+    const targetContainer = getTargetContainer();
+    if (!targetContainer) return false;
 
     injectStyles();
     hideNativeControls();
@@ -414,6 +419,7 @@
 
     targetContainer.appendChild(container);
     updateMaximizeIcon();
+    return true;
   }
 
   // Settings Modal (Lucid-Lyrics pattern using Spicetify.PopupModal)
@@ -510,7 +516,7 @@
 
   // Profile Menu Integration (Lucid-Lyrics style)
   function registerProfileMenu() {
-    if (!Spicetify.Menu?.Item) {
+    if (!Spicetify?.Menu?.Item) {
       setTimeout(registerProfileMenu, 250);
       return;
     }
@@ -529,13 +535,17 @@
   }
 
   function init() {
-    if (!Spicetify?.Platform || !getTransport()) {
-      setTimeout(init, 150);
-      return;
-    }
-
     injectStyles();
-    mountControls();
+
+    // Retry mounting until Spotify finishes DOM render
+    let attempts = 0;
+    const interval = setInterval(() => {
+      attempts++;
+      if (mountControls() || attempts > 60) {
+        clearInterval(interval);
+      }
+    }, 200);
+
     registerProfileMenu();
 
     window.addEventListener("resize", () => {
