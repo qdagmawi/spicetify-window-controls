@@ -4,22 +4,6 @@ A sleek, lightweight Spicetify extension that adds customizable window controls 
 
 ![Window Controls Preview](preview.png)
 
-## Available Modes & Layouts
-
-The extension allows you to tailor your topbar layout to your workflow through the built-in settings modal:
-
-### 1. Standard Window Controls (Default)
-Clean, native-style **Minimize**, **Maximize / Restore Down**, and **Close** controls directly inside Spotify's topbar, replacing the OS window frame.
-
-![Standard Window Controls](preview-standard.png)
-
-### 2. Miniplayer / Compact Mode
-Enable the **Popup Player / Spicy Lyrics PiP** shortcut with a single **Close to Tray** button for a minimal, streamlined topbar.
-
-![Miniplayer Mode](preview-miniplayer.png)
-
----
-
 ## Features
 
 - **Standard Window Controls by Default**:
