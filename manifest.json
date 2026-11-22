@@ -4,6 +4,7 @@
   "main": "window-controls.js",
   "preview": "topbar_preview.png",
   "readme": "README.md",
+  "branch": "master",
   "authors": [
     {
       "name": "qdagmawi",
