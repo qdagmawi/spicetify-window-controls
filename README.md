@@ -2,7 +2,7 @@
 
 A sleek, lightweight Spicetify extension that adds customizable window controls (**Minimize**, **Maximize / Restore**, **Close**, and optional **PiP Miniplayer**) to Spotify's topbar, removes the Windows titlebar spacer for clean flush-right alignment, and provides an in-app settings modal accessible directly from your Profile menu.
 
-![Window Controls Preview](topbar_preview.png)
+![Window Controls Preview](preview.png)
 
 ## Available Modes & Layouts
 
