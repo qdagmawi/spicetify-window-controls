@@ -1,0 +1,14 @@
+{
+  "name": "Window Controls & Settings",
+  "description": "Custom topbar controls (Minimize, Maximize/Restore, Close, and optional PiP Miniplayer) with Profile Menu settings.",
+  "main": "window-controls.js",
+  "preview": "topbar_preview.png",
+  "readme": "README.md",
+  "authors": [
+    {
+      "name": "qdagmawi",
+      "url": "https://github.com/qdagmawi"
+    }
+  ],
+  "tags": ["window-controls", "settings", "layout", "tray", "pip"]
+}
